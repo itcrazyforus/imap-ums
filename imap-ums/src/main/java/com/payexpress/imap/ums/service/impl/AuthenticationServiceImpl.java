@@ -41,7 +41,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPassword(userRegisterDto.getPassword());
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
-
+        int rows = this.userMapper.insertSelective(user);
+        if (rows < 1) {
+            // TODO：不建议直接抛出 RuntimeException
+            throw new RuntimeException("注册失败");
+        }
         return ResultBean.buildSuccessResult();
     }
 }
